@@ -117,7 +117,7 @@ function Contact() {
   ]
 
   return (
-    <section id="contact" className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-blue-950 py-24 px-4">
+    <section id="contact" className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-blue-950 py-24 px-4 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -257,7 +257,7 @@ function Contact() {
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-4 p-4 bg-red-900 bg-opacity-50 border border-red-500 rounded-lg"
               >
-                <p className="text-red-400 text-center">
+                <p className="text-red-400 text-center break-words">
                   ❌ Failed to send message. Please try again or contact me directly at thawhtoozin200811@gmail.com
                 </p>
               </motion.div>
@@ -287,7 +287,7 @@ function Contact() {
                 </div>
                 <div>
                   <p className="text-gray-300 text-sm">Email</p>
-                  <a href="mailto:thawhtoozin200811@gmail.com" className="text-white hover:text-purple-400 transition-colors duration-300">
+                  <a href="mailto:thawhtoozin200811@gmail.com" className="text-white hover:text-purple-400 transition-colors duration-300 break-all">
                     thawhtoozin200811@gmail.com
                   </a>
                 </div>

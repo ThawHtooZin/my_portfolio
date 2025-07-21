@@ -12,7 +12,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       {/* Hero Section */}
       <Hero >
         <Navbar />
@@ -25,7 +25,7 @@ function App() {
       <Contact />
       {/* Footer */}
       <Footer />
-    </>
+    </div>
   )
 }
 

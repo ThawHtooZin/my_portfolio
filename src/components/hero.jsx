@@ -70,10 +70,10 @@ function Hero({ children }) {
         }}
       />
       {/* Left Side - Responsive */}
-      <div className="relative z-10 w-full lg:w-1/2 h-full flex items-center justify-center px-4">
-        <div className="text-left max-w">
+      <div className="relative z-10 w-full lg:w-1/2 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="text-left max-w-md w-full">
           <motion.h1 
-            className="text-4xl md:text-6xl font-bold mb-6 text-white whitespace-nowrap"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -81,7 +81,7 @@ function Hero({ children }) {
             Hello, I am <span className="bg-gradient-to-r from-purple-400 via-purple-600 to-blue-500 bg-clip-text text-transparent">Thaw Htoo Zin</span>
           </motion.h1>
           <motion.p 
-            className="text-lg md:text-2xl mb-8 text-gray-200 min-h-[2.5rem]"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-gray-200 min-h-[2rem] sm:min-h-[2.5rem] leading-relaxed"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -89,17 +89,23 @@ function Hero({ children }) {
             I am a passionate and dedicated {currentTitle}
             <span
               className={`inline-block align-middle ml-1 transition-all duration-300 ${blink ? 'opacity-100 drop-shadow-[0_0_6px_rgba(168,85,247,0.8)]' : 'opacity-30'}`}
-              style={{fontSize: '1.5em'}}>
+              style={{fontSize: '1.2em'}}>
               ✨
             </span>
           </motion.p>
           <motion.button 
-            className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_5px_rgba(139,92,246,0.7)]"
+            className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-base sm:text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_5px_rgba(139,92,246,0.7)] w-full sm:w-auto"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              document.getElementById('about').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }}
           >
             Get Started
           </motion.button>
