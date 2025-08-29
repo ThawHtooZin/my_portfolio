@@ -86,12 +86,12 @@ function Projects() {
                 </div>
                 <div className="flex gap-3 mt-auto">
                   {project.live && (
-                    <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-[0_0_20px_5px_rgba(34,197,94,0.3)] transition-all duration-300">
+                    <a href={project.live} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-[0_0_20px_5px_rgba(34,197,94,0.3)] transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                       View Live
                     </a>
                   )}
                   {project.github && (
-                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-gradient-to-r from-gray-700 to-purple-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-[0_0_20px_5px_rgba(139,92,246,0.3)] transition-all duration-300">
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-purple-800 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-[0_0_20px_5px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                       View GitHub
                     </a>
                   )}

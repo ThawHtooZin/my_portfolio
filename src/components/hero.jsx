@@ -70,10 +70,10 @@ function Hero({ children }) {
         }}
       />
       {/* Left Side - Responsive */}
-      <div className="relative z-10 w-full lg:w-1/2 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="text-left max-w-md w-full">
+      <div className="relative z-10 w-full lg:w-1/2 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="text-left max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl w-full">
           <motion.h1 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -81,7 +81,7 @@ function Hero({ children }) {
             Hello, I am <span className="bg-gradient-to-r from-purple-400 via-purple-600 to-blue-500 bg-clip-text text-transparent">Thaw Htoo Zin</span>
           </motion.h1>
           <motion.p 
-            className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-gray-200 min-h-[2rem] sm:min-h-[2.5rem] leading-relaxed"
+            className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl mb-6 sm:mb-8 text-gray-200 min-h-[2rem] sm:min-h-[2.5rem] leading-relaxed"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}

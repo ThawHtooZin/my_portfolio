@@ -25,6 +25,20 @@ nav {
   max-width: 100vw;
 }
 
+/* Mobile menu specific fixes */
+.mobile-menu {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Ensure navbar container doesn't overflow */
+nav > div {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 /* Blob Animation */
 @keyframes blob {
   0% {

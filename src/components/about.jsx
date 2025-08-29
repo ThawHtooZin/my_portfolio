@@ -47,23 +47,16 @@ function About() {
       title: 'Software Developer (Remote)',
       company: 'Digital Genius (Thailand)',
       period: '2025 - Present',
-      description: 'Solo dev role for crypto/forex alert app. Built Flutter frontend and secure Python backend with WebSocket support. Real-time alert system in production.',
-      tech: ['Flutter', 'Python', 'Supabase', 'WebSockets']
+      description: 'Solo dev role for eLibrary app using firebase and secure laravel backend and flutter frontend built in with Laravel Backpack dashboard library.',
+      tech: ['Flutter', 'Laravel', 'Firebase', 'Laravel Backpack']
     },
     {
       title: 'Web Developer',
       company: 'Freelance Clients',
       period: '2023 - 2025',
-      description: 'Delivered responsive and modern portfolio, company, and service websites. Specialized in animated UI/UX with Tailwind and React.',
-      tech: ['React', 'Tailwind CSS', 'JavaScript', 'Figma']
+      description: 'Delivered responsive and modern portfolio, company, and service websites using Tailwind and Bootstrap.',
+      tech: ['Tailwind CSS', 'Bootstrap', 'JavaScript', 'Figma']
     },
-    {
-      title: 'Intern Developer',
-      company: 'Shwe Phone Hein Agency',
-      period: '2021 - 2022',
-      description: 'Helped design and deploy an agency website. Worked with legacy PHP systems and migrated parts to Laravel.',
-      tech: ['PHP', 'Laravel', 'MySQL']
-    }
   ]
 
   return (
@@ -96,12 +89,12 @@ function About() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="flex justify-center mb-12"
         >
-          <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-full p-2">
+          <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-full p-2 flex flex-nowrap overflow-hidden">
             {['about', 'skills', 'experience'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   activeTab === tab
                     ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
@@ -261,7 +254,7 @@ function About() {
                     className="grid grid-cols-3 gap-4 pt-6"
                   >
                     {[
-                      { number: '2+', label: 'Years Experience' },
+                      { number: '2.5+', label: 'Years Experience' },
                       { number: '4+', label: 'Projects Completed' },
                       { number: '98%', label: 'Client Satisfaction' }
                     ].map((stat, index) => (
@@ -286,17 +279,16 @@ function About() {
               <motion.div
                 key="skills"
                 initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
+                animate={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: -50 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="space-y-8"
+                className="space-y-6 sm:space-y-8"
               >
-                <div className="text-center mb-12">
-                  <h3 className="text-3xl font-bold text-white mb-4">Technical Skills</h3>
-                  <p className="text-gray-300">My expertise spans across various technologies and frameworks</p>
+                <div className="text-center mb-8 sm:mb-12">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">Technical Skills</h3>
+                  <p className="text-gray-300 text-sm sm:text-base">My expertise spans across various technologies and frameworks</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
                   {skills.map((skill, index) => (
                     <motion.div
                       key={skill.name}
@@ -304,13 +296,13 @@ function About() {
                       animate={hasAnimated ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
                       whileHover={{ scale: 1.02, y: -5 }}
-                      className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition-colors duration-300"
+                      className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-gray-700 hover:border-purple-500 transition-colors duration-300"
                     >
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-white font-medium">{skill.name}</span>
-                        <span className="text-gray-400">{skill.level}%</span>
+                      <div className="flex justify-between items-center mb-2 sm:mb-3">
+                        <span className="text-white font-medium text-sm sm:text-base">{skill.name}</span>
+                        <span className="text-gray-400 text-sm">{skill.level}%</span>
                       </div>
-                      <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                      <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={hasAnimated ? { width: `${skill.level}%` } : { width: 0 }}
@@ -321,7 +313,7 @@ function About() {
                             stiffness: 120,
                             damping: 10
                           }}
-                          className={`h-3 bg-gradient-to-r ${skill.color} rounded-full`}
+                          className={`h-2 sm:h-3 bg-gradient-to-r ${skill.color} rounded-full`}
                           style={{ minWidth: '1.5rem' }}
                         />
                       </div>
@@ -334,10 +326,10 @@ function About() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="mt-12"
+                  className="mt-8 sm:mt-12"
                 >
-                  <h4 className="text-2xl font-bold text-white mb-6 text-center">Other Skills</h4>
-                  <div className="flex flex-wrap justify-center gap-4">
+                  <h4 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">Other Skills</h4>
+                  <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
                     {['Firebase', 'Tailwind CSS', 'MySQL', 'SQLite', 'Figma', 'Postman', 'Git', 'Next.js', 'REST APIs', 'Framer Motion', 'Node.js'].map((skill, index) => (
                       <motion.span
                         key={skill}
@@ -345,7 +337,7 @@ function About() {
                         animate={hasAnimated ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
                         whileHover={{ scale: 1.1, y: -2 }}
-                        className="px-4 py-2 bg-gray-700 bg-opacity-50 rounded-full text-gray-300 text-sm border border-gray-600 hover:border-purple-500 transition-colors duration-300 cursor-pointer"
+                        className="px-2 sm:px-4 py-1 sm:py-2 bg-gray-700 bg-opacity-50 rounded-full text-gray-300 text-xs sm:text-sm border border-gray-600 hover:border-purple-500 transition-colors duration-300 cursor-pointer"
                       >
                         {skill}
                       </motion.span>
@@ -364,12 +356,12 @@ function About() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="space-y-8"
               >
-                <div className="text-center mb-12">
-                  <h3 className="text-3xl font-bold text-white mb-4">Professional Experience</h3>
-                  <p className="text-gray-300">My journey in software development</p>
+                <div className="text-center mb-8 sm:mb-12">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">Professional Experience</h3>
+                  <p className="text-gray-300 text-sm sm:text-base">My journey in software development</p>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-4 sm:space-y-8">
                   {experiences.map((exp, index) => (
                     <motion.div
                       key={index}
@@ -380,13 +372,13 @@ function About() {
                     >
                       {/* Timeline Line */}
                       {index < experiences.length - 1 && (
-                        <div className="absolute left-6 top-16 w-0.5 h-full bg-gradient-to-b from-purple-500 to-blue-500"></div>
+                        <div className="absolute left-3 sm:left-6 top-12 sm:top-16 w-0.5 h-full bg-gradient-to-b from-purple-500 to-blue-500"></div>
                       )}
                       
-                      <div className="flex items-start space-x-6">
+                      <div className="flex items-start space-x-3 sm:space-x-6">
                         {/* Timeline Dot */}
                         <motion.div 
-                          className="relative z-10 flex-shrink-0 w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center"
+                          className="relative z-10 flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center"
                           whileHover={{ scale: 1.2 }}
                           animate={{ 
                             boxShadow: ["0 0 0 0 rgba(168, 85, 247, 0.4)", "0 0 0 10px rgba(168, 85, 247, 0)"],
@@ -399,26 +391,26 @@ function About() {
                             }
                           }}
                         >
-                          <div className="w-4 h-4 bg-white rounded-full"></div>
+                          <div className="w-2 h-2 sm:w-4 sm:h-4 bg-white rounded-full"></div>
                         </motion.div>
 
                         {/* Content */}
                         <motion.div 
-                          className="flex-1 bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition-colors duration-300"
+                          className="flex-1 bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-gray-700 hover:border-purple-500 transition-colors duration-300"
                           whileHover={{ scale: 1.02, y: -5 }}
                         >
-                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                            <h4 className="text-xl font-bold text-white">{exp.title}</h4>
-                            <span className="text-purple-400 font-medium">{exp.period}</span>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4">
+                            <h4 className="text-lg sm:text-xl font-bold text-white">{exp.title}</h4>
+                            <span className="text-purple-400 font-medium text-sm sm:text-base">{exp.period}</span>
                           </div>
-                          <p className="text-blue-400 font-medium mb-3">{exp.company}</p>
-                          <p className="text-gray-300 mb-4 leading-relaxed">{exp.description}</p>
-                          <div className="flex flex-wrap gap-2">
+                          <p className="text-blue-400 font-medium mb-2 sm:mb-3 text-sm sm:text-base">{exp.company}</p>
+                          <p className="text-gray-300 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">{exp.description}</p>
+                          <div className="flex flex-wrap gap-1 sm:gap-2">
                             {exp.tech.map((tech) => (
                               <motion.span
                                 key={tech}
                                 whileHover={{ scale: 1.1 }}
-                                className="px-3 py-1 bg-gray-700 bg-opacity-50 rounded-full text-sm text-gray-300 border border-gray-600 hover:border-purple-500 transition-colors duration-300"
+                                className="px-2 sm:px-3 py-1 bg-gray-700 bg-opacity-50 rounded-full text-xs sm:text-sm text-gray-300 border border-gray-600 hover:border-purple-500 transition-colors duration-300"
                               >
                                 {tech}
                               </motion.span>
