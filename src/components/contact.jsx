@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import emailjs from 'emailjs-com'
 // Import SVG files
 import githubIcon from '../assets/icons/github.svg'
 import emailIcon from '../assets/icons/email.svg'
@@ -17,11 +16,10 @@ function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null) // 'success', 'error', null
 
-  // Initialize EmailJS
-  useEffect(() => {
-    // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
-    emailjs.init('As0TkG6Jds3fVjOVz')
-  }, [])
+  // Backend API URL - works for both development and production
+  const API_URL = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3001/api' 
+    : '/api'
 
   // Check if component is in view and trigger animation once
   useEffect(() => {
@@ -55,36 +53,36 @@ function Contact() {
     setSubmitStatus(null)
 
     try {
-      // Replace these with your actual EmailJS credentials
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-        to_email: 'thawhtoozin200811@gmail.com' // Your Gmail address
-      }
-
-      const result = await emailjs.send(
-        'service_kt0p5p9', // Replace with your EmailJS service ID
-        'template_49i6et7', // Replace with your EmailJS template ID
-        templateParams
-      )
-
-      console.log('Email sent successfully:', result)
-      setSubmitStatus('success')
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+      // Send data to backend API
+      const response = await fetch(`${API_URL}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       })
 
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setSubmitStatus(null)
-      }, 5000)
+      const result = await response.json()
+
+      if (result.success) {
+        console.log('Email sent successfully:', result.messageId)
+        setSubmitStatus('success')
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        })
+
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus(null)
+        }, 5000)
+      } else {
+        throw new Error(result.message || 'Failed to send message')
+      }
 
     } catch (error) {
       console.error('Email send failed:', error)
