@@ -19,7 +19,7 @@ function Contact() {
   // Backend API URL - works for both development and production
   const API_URL = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3001/api' 
-    : '/api'
+    : 'https://thawhtoozin.protechmm.com/api'
 
   // Check if component is in view and trigger animation once
   useEffect(() => {
