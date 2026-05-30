@@ -1,156 +1,189 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+const NAV_ITEMS = [
+  { id: 'home', label: 'Home', href: '#' },
+  { id: 'about', label: 'About', href: '#about' },
+  { id: 'projects', label: 'Projects', href: '#projects' },
+  { id: 'contact', label: 'Contact', href: '#contact' },
+]
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
 
-  // Animated hamburger icon with smooth transitions
-  const Hamburger = ({ open }) => (
-    <div className="w-6 h-6 flex flex-col justify-center items-center">
-      <span className={`block h-0.5 w-6 bg-white rounded transition-all duration-300 ease-in-out ${open ? 'rotate-45 translate-y-2' : ''}`}></span>
-      <span className={`block h-0.5 w-6 bg-white rounded mt-1 transition-all duration-300 ease-in-out ${open ? 'opacity-0 scale-0' : ''}`}></span>
-      <span className={`block h-0.5 w-6 bg-white rounded mt-1 transition-all duration-300 ease-in-out ${open ? '-rotate-45 -translate-y-2' : ''}`}></span>
-    </div>
-  )
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-  // Close menu on link click
+  useEffect(() => {
+    const sections = NAV_ITEMS.map((item) => item.id).filter((id) => id !== 'home')
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id)
+        },
+        { rootMargin: '-40% 0px -55% 0px' }
+      )
+      observer.observe(el)
+      return observer
+    })
+
+    const onTop = () => {
+      if (window.scrollY < 120) setActiveSection('home')
+    }
+    window.addEventListener('scroll', onTop, { passive: true })
+
+    return () => {
+      observers.forEach((o) => o?.disconnect())
+      window.removeEventListener('scroll', onTop)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMenuOpen])
+
   const handleLinkClick = () => setIsMenuOpen(false)
-
-  const navItems = ['Home', 'About', 'Projects', 'Contact']
 
   return (
     <>
-      <motion.nav 
-        className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm"
-        initial={{ y: -100, opacity: 0 }}
+      <motion.header
+        className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4 sm:pt-5"
+        initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo/Brand - Left */}
-            <motion.div 
-              className="flex-shrink-0"
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <a className="text-white text-xl font-bold hover:scale-105 transition-transform duration-300" href="#">Thaw Htoo Zin</a>
-            </motion.div>
+        <nav
+          className={`max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-5 h-14 sm:h-[3.75rem] rounded-2xl border transition-all duration-500 ${
+            scrolled
+              ? 'bg-[#0a0a12]/80 backdrop-blur-xl border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+              : 'bg-white/[0.03] backdrop-blur-md border-white/[0.06]'
+          }`}
+        >
+          {/* Logo */}
+          <a
+            href="#"
+            className="flex items-center gap-2.5 shrink-0 group"
+            onClick={handleLinkClick}
+          >
+            <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold font-display shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
+              T
+            </span>
+            <span className="hidden sm:block text-white font-semibold font-display text-sm tracking-tight">
+              Thaw Htoo Zin
+            </span>
+          </a>
 
-            {/* Desktop Navigation - Middle */}
-            <motion.div 
-              className="hidden md:block absolute left-1/2 transform -translate-x-1/2"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <div className="flex items-baseline space-x-4">
-                {navItems.map((item, index) => (
-                  <motion.a
-                    key={item}
-                    href={item === 'Home' ? '#' : `#${item.toLowerCase()}`}
-                    className="text-white hover:text-transparent bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover:-translate-y-1"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                  >
-                    {item}
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Member Text - Right */}
-            <motion.div 
-              className="hidden md:block flex-shrink-0"
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <p className="text-white">
-                Member of <a href="https://protechmm.com/" className="relative inline-block text-yellow-400 hover:text-white transition-all duration-300 hover:scale-105">
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                  ProTechMM
-                  <span className="absolute top-0 -right-1 translate-x-1/2 -translate-y-1/2 text-lg rotate-45">👑</span>
-                </a>
-              </p>
-            </motion.div>
-
-            {/* Mobile menu button */}
-            <motion.div 
-              className="md:hidden"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.8 }}
-            >
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white hover:text-gray-300 focus:outline-none transition-colors duration-300 hover:scale-110"
-                aria-label="Toggle menu"
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03]">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeSection === item.id ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                }`}
               >
-                <Hamburger open={isMenuOpen} />
-              </button>
-            </motion.div>
+                {activeSection === item.id && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 bg-white/[0.08] rounded-lg border border-white/[0.06]"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{item.label}</span>
+              </a>
+            ))}
           </div>
-        </div>
-      </motion.nav>
 
-      {/* Mobile Navigation - Boxed Card Style */}
+          {/* CTA + mobile toggle */}
+          <div className="flex items-center gap-3">
+            <a
+              href="#contact"
+              className="hidden sm:inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] transition-shadow"
+            >
+              Hire me
+            </a>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex flex-col items-center justify-center gap-1.5"
+              aria-label="Toggle menu"
+            >
+              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? 'opacity-0 scale-0' : ''}`} />
+              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            </button>
+          </div>
+        </nav>
+      </motion.header>
+
+      {/* Mobile menu overlay */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            key="mobile-menu"
-            initial={{ y: -20, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3, type: 'spring', stiffness: 200, damping: 20 }}
-            className="md:hidden fixed top-20 left-4 right-4 z-40 bg-black/80 backdrop-blur-xl rounded-2xl border border-purple-500/30 shadow-2xl"
-            style={{ 
-              boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(168,85,247,0.2), inset 0 1px 0 rgba(255,255,255,0.1)'
-            }}
+            className="fixed inset-0 z-[60] md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            {/* Header with gradient */}
-            <div className="bg-gradient-to-r from-purple-600/90 to-blue-600/90 rounded-t-2xl px-6 py-4 flex justify-between items-center">
-              <h3 className="text-white text-lg font-bold">Menu</h3>
-            </div>
-
-            {/* Menu Content */}
-            <div className="px-6 py-6 space-y-2">
-              {navItems.map((item, index) => (
-                <motion.a
-                  key={item}
-                  href={item === 'Home' ? '#' : `#${item.toLowerCase()}`}
-                  onClick={handleLinkClick}
-                  className="relative text-white hover:text-transparent bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text block px-4 py-3 rounded-xl text-lg font-semibold transition-all duration-300 hover:bg-purple-500/10 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50 group"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  <span className="relative flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-purple-400 to-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                    {item}
-                  </span>
-                </motion.a>
-              ))}
-              
-              {/* Footer */}
-              <motion.div 
-                className="border-t border-purple-500/30 pt-4 mt-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: 0.4 }}
-              >
-                <p className="text-white/80 text-sm font-medium text-center">
-                  Member of <a href="https://protechmm.com/" className="relative inline-block text-yellow-400 hover:text-white transition-all duration-300 group">
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
-                    ProTechMM
-                    <span className="ml-1">👑</span>
+            <motion.div
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <motion.div
+              className="absolute top-24 left-4 right-4 rounded-2xl border border-white/[0.08] bg-[#0a0a12]/95 backdrop-blur-xl overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, y: -16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+            >
+              <div className="p-2">
+                {NAV_ITEMS.map((item, i) => (
+                  <motion.a
+                    key={item.id}
+                    href={item.href}
+                    onClick={handleLinkClick}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium transition-colors ${
+                      activeSection === item.id
+                        ? 'bg-purple-500/15 text-white'
+                        : 'text-gray-300 hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span className="text-xs text-purple-400 font-mono w-5">
+                      0{i + 1}
+                    </span>
+                    {item.label}
+                  </motion.a>
+                ))}
+              </div>
+              <div className="px-4 py-4 border-t border-white/[0.06] flex items-center justify-between">
+                <p className="text-xs text-gray-500">
+                  Member of{' '}
+                  <a href="https://protechmm.com/" className="text-amber-400 hover:text-amber-300">
+                    ProTechMM 👑
                   </a>
                 </p>
-              </motion.div>
-            </div>
+                <a
+                  href="#contact"
+                  onClick={handleLinkClick}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                >
+                  Hire me
+                </a>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
