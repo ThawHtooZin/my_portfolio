@@ -54,7 +54,7 @@ const socialLinks = [
   },
   {
     name: 'Telegram',
-    handle: '@thawhtoozin',
+    handle: '@ThawHtooZinTomm',
     url: 'https://t.me/thawhtoozin',
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
