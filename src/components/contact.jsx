@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 import SectionBackground from './ui/SectionBackground'
 import GlassCard from './ui/GlassCard'
 import { CONTACT_GLOW } from './ui/glassGlow'
 import githubIcon from '../assets/icons/github.svg'
 
-const API_URL =
-  import.meta.env.DEV
-    ? 'http://localhost:3001/api'
-    : 'https://thawhtoozin.protechmm.com/api'
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+
+const emailJsConfigured =
+  Boolean(EMAILJS_PUBLIC_KEY) &&
+  Boolean(EMAILJS_SERVICE_ID) &&
+  Boolean(EMAILJS_TEMPLATE_ID)
 
 const contactInfo = [
   {
@@ -75,21 +80,33 @@ function Contact() {
     setIsSubmitting(true)
     setSubmitStatus(null)
 
-    try {
-      const response = await fetch(`${API_URL}/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-      const result = await response.json()
+    if (!emailJsConfigured) {
+      setSubmitStatus('error')
+      setTimeout(() => setSubmitStatus(null), 5000)
+      setIsSubmitting(false)
+      return
+    }
 
-      if (result.success) {
-        setSubmitStatus('success')
-        setFormData({ name: '', email: '', subject: '', message: '' })
-        setTimeout(() => setSubmitStatus(null), 5000)
-      } else {
-        throw new Error(result.message || 'Failed to send message')
-      }
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          name: formData.name,
+          email: formData.email,
+          title: formData.subject,
+          message: formData.message,
+          time: new Date().toLocaleString('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }),
+        },
+        EMAILJS_PUBLIC_KEY,
+      )
+
+      setSubmitStatus('success')
+      setFormData({ name: '', email: '', subject: '', message: '' })
+      setTimeout(() => setSubmitStatus(null), 5000)
     } catch {
       setSubmitStatus('error')
       setTimeout(() => setSubmitStatus(null), 5000)

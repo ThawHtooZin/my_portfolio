@@ -13,7 +13,7 @@ The contact form now uses EmailJS to send emails directly to your Gmail without 
 1. In EmailJS dashboard, go to "Email Services"
 2. Click "Add New Service"
 3. Choose "Gmail" as your email service
-4. Connect your Gmail account (thawhtoozin@gmail.com)
+4. Connect your Gmail account (thawhtoozin200811@gmail.com)
 5. Note down the **Service ID** (e.g., "service_abc123")
 
 ### 3. Email Template Setup
@@ -39,30 +39,24 @@ Message:
 1. Go to "Account" → "API Keys" in EmailJS dashboard
 2. Copy your **Public Key**
 
-### 5. Update the Code
-Replace the placeholders in `src/components/contact.jsx`:
+### 5. Add keys to `.env`
+Create or update `.env` in the project root (Vite reads `VITE_` vars at build time):
 
-```javascript
-// Line 15: Replace 'YOUR_PUBLIC_KEY'
-emailjs.init('YOUR_PUBLIC_KEY')
-
-// Line 47: Replace 'YOUR_SERVICE_ID'
-'YOUR_SERVICE_ID'
-
-// Line 48: Replace 'YOUR_TEMPLATE_ID'
-'YOUR_TEMPLATE_ID'
+```env
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
+VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
 ```
 
-## Example with Real Values:
-```javascript
-emailjs.init('user_abc123def456')
-// ...
-const result = await emailjs.send(
-  'service_xyz789', 
-  'template_abc123',
-  templateParams
-)
-```
+Restart dev server after changing `.env`. For production, set these **before** running `npm run build`.
+
+### Template variables
+The form sends these fields — use the same names in your EmailJS template:
+- `{{from_name}}`
+- `{{from_email}}`
+- `{{subject}}`
+- `{{message}}`
+- `{{reply_to}}` (optional — set "Reply-To" in template settings)
 
 ## Features Implemented:
 - ✅ Form validation

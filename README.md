@@ -34,6 +34,4 @@ sudo systemctl reload nginx
 
 ## Local dev
 
-- `npm run dev` – frontend
-- `npm run server` – contact API
-- `npm run dev:full` – both
+- `npm run dev` — frontend (contact form uses EmailJS, no API server needed)
