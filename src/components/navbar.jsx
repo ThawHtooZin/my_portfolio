@@ -14,7 +14,7 @@ function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(window.scrollY > 24)
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
@@ -56,77 +56,65 @@ function Navbar() {
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4 sm:pt-5"
-        initial={{ y: -80, opacity: 0 }}
+        className="fixed top-0 left-0 right-0 z-50"
+        initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6 }}
       >
         <nav
-          className={`max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-5 h-14 sm:h-[3.75rem] rounded-2xl border transition-all duration-500 ${
+          className={`max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-[4.25rem] border-b transition-all duration-400 ${
             scrolled
-              ? 'bg-[#0a0a12]/80 backdrop-blur-xl border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
-              : 'bg-white/[0.03] backdrop-blur-md border-white/[0.06]'
+              ? 'bg-[#0c1220]/95 backdrop-blur-sm border-[rgba(184,146,74,0.35)] shadow-[0_4px_24px_rgba(0,0,0,0.2)]'
+              : 'bg-transparent border-[rgba(184,146,74,0.15)]'
           }`}
         >
-          {/* Logo */}
-          <a
-            href="#"
-            className="flex items-center gap-2.5 shrink-0 group"
-            onClick={handleLinkClick}
-          >
-            <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold font-display shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
-              T
-            </span>
-            <span className="hidden sm:block text-white font-semibold font-display text-sm tracking-tight">
-              Thaw Htoo Zin
+          <a href="#" className="flex items-center gap-3 shrink-0 group" onClick={handleLinkClick}>
+            <span className="font-display text-xl sm:text-2xl text-[#f5f0e8] tracking-wide group-hover:text-[#d4b978] transition-colors">
+              T<span className="text-[#b8924a]">.</span> Htoo Zin
             </span>
           </a>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03]">
+          <div className="hidden md:flex items-center gap-8">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.id}
                 href={item.href}
-                className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeSection === item.id ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                className={`relative py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                  activeSection === item.id
+                    ? 'text-[#d4b978]'
+                    : 'text-[#9a958a] hover:text-[#e8e4dc]'
                 }`}
               >
+                {item.label}
                 {activeSection === item.id && (
                   <motion.span
-                    layoutId="nav-active"
-                    className="absolute inset-0 bg-white/[0.08] rounded-lg border border-white/[0.06]"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    layoutId="nav-underline"
+                    className="absolute -bottom-[1.35rem] left-0 right-0 h-px bg-[#b8924a]"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="relative z-10">{item.label}</span>
               </a>
             ))}
           </div>
 
-          {/* CTA + mobile toggle */}
-          <div className="flex items-center gap-3">
-            <a
-              href="#contact"
-              className="hidden sm:inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-[0_0_24px_rgba(139,92,246,0.35)] transition-shadow"
-            >
-              Hire me
+          <div className="flex items-center gap-4">
+            <a href="#contact" className="hidden sm:inline-flex btn-heritage-primary !py-2 !px-5 !text-[0.7rem]">
+              Inquire
             </a>
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex flex-col items-center justify-center gap-1.5"
+              className="md:hidden flex flex-col gap-1.5 p-2"
               aria-label="Toggle menu"
             >
-              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? 'opacity-0 scale-0' : ''}`} />
-              <span className={`w-5 h-0.5 bg-white rounded transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`w-6 h-px bg-[#d4b978] transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-6 h-px bg-[#d4b978] transition-all ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-6 h-px bg-[#d4b978] transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </button>
           </div>
         </nav>
       </motion.header>
 
-      {/* Mobile menu overlay */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -135,54 +123,35 @@ function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            <div className="absolute inset-0 bg-[#0c1220]/90" onClick={() => setIsMenuOpen(false)} />
             <motion.div
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <motion.div
-              className="absolute top-24 left-4 right-4 rounded-2xl border border-white/[0.08] bg-[#0a0a12]/95 backdrop-blur-xl overflow-hidden shadow-2xl"
-              initial={{ opacity: 0, y: -16, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -16, scale: 0.96 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+              className="absolute top-16 left-0 right-0 bg-[#141c2e] border-b border-[rgba(184,146,74,0.3)] px-6 py-8"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
             >
-              <div className="p-2">
-                {NAV_ITEMS.map((item, i) => (
-                  <motion.a
-                    key={item.id}
-                    href={item.href}
-                    onClick={handleLinkClick}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium transition-colors ${
-                      activeSection === item.id
-                        ? 'bg-purple-500/15 text-white'
-                        : 'text-gray-300 hover:bg-white/[0.04]'
-                    }`}
-                  >
-                    <span className="text-xs text-purple-400 font-mono w-5">
-                      0{i + 1}
-                    </span>
-                    {item.label}
-                  </motion.a>
-                ))}
-              </div>
-              <div className="px-4 py-4 border-t border-white/[0.06] flex items-center justify-between">
-                <p className="text-xs text-gray-500">
-                  Member of{' '}
-                  <a href="https://protechmm.com/" className="text-amber-400 hover:text-amber-300">
-                    ProTechMM 👑
-                  </a>
-                </p>
-                <a
-                  href="#contact"
+              {NAV_ITEMS.map((item, i) => (
+                <motion.a
+                  key={item.id}
+                  href={item.href}
                   onClick={handleLinkClick}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`block py-3 text-sm uppercase tracking-[0.2em] border-b border-[rgba(184,146,74,0.1)] ${
+                    activeSection === item.id ? 'text-[#d4b978]' : 'text-[#9a958a]'
+                  }`}
                 >
-                  Hire me
-                </a>
-              </div>
+                  {item.label}
+                </motion.a>
+              ))}
+              <a
+                href="#contact"
+                onClick={handleLinkClick}
+                className="btn-heritage-primary w-full mt-6 text-center"
+              >
+                Inquire
+              </a>
             </motion.div>
           </motion.div>
         )}

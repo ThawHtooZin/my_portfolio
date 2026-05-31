@@ -3,11 +3,14 @@ function GlassCard({
   className = '',
   hover = true,
   active = false,
-  glow = 'glass-glow-default',
+  glow = '',
+  tone = 'dark',
 }) {
+  const light = tone === 'light'
+
   return (
     <div
-      className={`glass-card-border h-full ${glow} ${hover ? 'group' : ''} ${active ? 'is-active' : ''} ${className}`}
+      className={`glass-card-border h-full ${light ? 'glass-card-border--light' : ''} ${hover ? 'group' : ''} ${active ? 'is-active' : ''} ${glow} ${className}`}
     >
       <div className="glass-card-inner h-full">{children}</div>
     </div>

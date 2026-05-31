@@ -12,16 +12,16 @@ function SectionHeader({ eyebrow, title, highlight, subtitle, align = 'left' }) 
       className={`mb-14 ${isCenter ? 'text-center mx-auto max-w-3xl' : ''}`}
     >
       {eyebrow && (
-        <p className="text-sm font-semibold tracking-[0.25em] uppercase text-purple-400 mb-4">
+        <p className="heritage-eyebrow mb-4">
           {eyebrow}
         </p>
       )}
-      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] font-display">
+      <h2 className="heritage-title text-4xl sm:text-5xl lg:text-6xl text-[#e8e4dc] leading-[1.1]">
         {title}{' '}
-        {highlight && <span className="projects-shimmer-text">{highlight}</span>}
+        {highlight && <span className="heritage-title-accent">{highlight}</span>}
       </h2>
       {subtitle && (
-        <p className={`mt-4 text-gray-400 text-lg max-w-xl ${isCenter ? 'mx-auto' : ''}`}>
+        <p className={`mt-4 text-[#c9c4b8] text-lg max-w-xl ${isCenter ? 'mx-auto' : ''}`}>
           {subtitle}
         </p>
       )}

@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   motion,
   AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
 } from 'framer-motion'
 import learningprotechmm from '../assets/projects/learningprotechmm.png'
 import shwebhonehein from '../assets/projects/shwebhonehein.png'
@@ -146,10 +143,8 @@ const bentoLayout = [
 
 function ExternalLink({ href, children, variant = 'primary' }) {
   const styles = {
-    primary:
-      'bg-white text-gray-950 hover:bg-white/90 shadow-[0_0_30px_rgba(255,255,255,0.15)]',
-    ghost:
-      'bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm',
+    primary: 'btn-heritage-primary !text-[0.7rem] !py-2.5 !px-5',
+    ghost: 'btn-heritage-outline !text-[0.7rem] !py-2.5 !px-5',
   }
 
   return (
@@ -157,9 +152,9 @@ function ExternalLink({ href, children, variant = 'primary' }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${styles[variant]}`}
-      whileHover={{ scale: 1.04, y: -2 }}
-      whileTap={{ scale: 0.97 }}
+      className={`inline-flex items-center justify-center gap-2 ${styles[variant]}`}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
     >
       {children}
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,36 +170,6 @@ function ExternalLink({ href, children, variant = 'primary' }) {
 }
 
 function ProjectCard({ project, index, layoutClass, onOpen, isFiltered }) {
-  const ref = useRef(null)
-  const [spotlight, setSpotlight] = useState({ x: 50, y: 50, opacity: 0 })
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const springConfig = { stiffness: 260, damping: 22 }
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), springConfig)
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), springConfig)
-
-  const handleMouseMove = useCallback((e) => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const px = (e.clientX - rect.left) / rect.width - 0.5
-    const py = (e.clientY - rect.top) / rect.height - 0.5
-    mouseX.set(px)
-    mouseY.set(py)
-    setSpotlight({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-      opacity: 1,
-    })
-  }, [mouseX, mouseY])
-
-  const handleMouseLeave = useCallback(() => {
-    mouseX.set(0)
-    mouseY.set(0)
-    setSpotlight((s) => ({ ...s, opacity: 0 }))
-  }, [mouseX, mouseY])
-
   const isFeatured = project.featured && !isFiltered
   const num = String(index + 1).padStart(2, '0')
 
@@ -212,111 +177,68 @@ function ProjectCard({ project, index, layoutClass, onOpen, isFiltered }) {
     <motion.article
       layout
       layoutId={`project-${project.title}`}
-      initial={{ opacity: 0, y: 48, scale: 0.96 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
       className={`group ${layoutClass} ${isFeatured ? 'min-h-[420px] lg:min-h-[520px]' : 'min-h-[320px]'}`}
+      whileHover={{ y: -4 }}
     >
-      <motion.div
-        ref={ref}
-        style={{ rotateX, rotateY, transformPerspective: 1200 }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="h-full"
+      <button
+        type="button"
+        onClick={() => onOpen(project)}
+        className={`glass-card-border ${glowFromAccent(project.accent)} w-full h-full text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-[#b8924a] rounded-sm`}
       >
-        <button
-          type="button"
-          onClick={() => onOpen(project)}
-          className={`glass-card-border ${glowFromAccent(project.accent)} w-full h-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 rounded-[1.25rem]`}
-        >
-          <div className="glass-card-inner flex flex-col h-full">
-            {/* Spotlight */}
-            <div
-              className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-500"
-              style={{
-                opacity: spotlight.opacity,
-                background: `radial-gradient(600px circle at ${spotlight.x}% ${spotlight.y}%, rgba(168,85,247,0.18), transparent 40%)`,
-              }}
+        <div className="glass-card-inner flex flex-col h-full">
+          <div
+            className={`relative overflow-hidden shrink-0 border-b border-[rgba(184,146,74,0.15)] ${
+              isFeatured ? 'h-[55%] lg:h-[58%]' : 'h-[52%]'
+            }`}
+          >
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
             />
+            <span className="absolute top-4 right-4 font-display text-4xl text-[#f5f0e8]/10 select-none leading-none">
+              {num}
+            </span>
+          </div>
 
-            {/* Image */}
-            <div
-              className={`relative overflow-hidden shrink-0 ${
-                isFeatured ? 'h-[55%] lg:h-[58%]' : 'h-[52%]'
+          <div className="relative z-20 flex flex-col flex-1 p-5 lg:p-6">
+            <div className="flex flex-wrap gap-2 mb-3">
+              {project.tech.slice(0, isFeatured ? 4 : 3).map((tech) => (
+                <span
+                  key={tech}
+                  className="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase text-[#9a958a] border border-[rgba(184,146,74,0.25)]"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <h3
+              className={`font-display text-[#f5f0e8] mb-2 leading-tight group-hover:text-[#d4b978] transition-colors ${
+                isFeatured ? 'text-2xl lg:text-3xl' : 'text-xl'
               }`}
             >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-              />
-              <div className={`absolute inset-0 bg-gradient-to-t ${project.accent} opacity-20 mix-blend-overlay`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f19] via-[#0f0f19]/40 to-transparent" />
+              {project.title}
+            </h3>
 
-              {/* Index watermark */}
-              <span className="absolute top-4 right-4 text-5xl lg:text-6xl font-black text-white/[0.07] select-none leading-none">
-                {num}
-              </span>
+            <p
+              className={`text-[#9a958a] leading-relaxed flex-1 text-sm ${
+                isFeatured ? 'line-clamp-3 lg:line-clamp-4' : 'line-clamp-2'
+              }`}
+            >
+              {project.description}
+            </p>
 
-              {/* Hover CTA pill */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs font-medium text-white">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  View case study
-                </span>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="relative z-20 flex flex-col flex-1 p-5 lg:p-6">
-              <div className="flex flex-wrap gap-2 mb-3">
-                {project.tech.slice(0, isFeatured ? 4 : 3).map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-0.5 rounded-md text-[11px] font-medium tracking-wide uppercase bg-white/5 text-purple-200/90 border border-white/10"
-                  >
-                    {tech}
-                  </span>
-                ))}
-                {project.tech.length > (isFeatured ? 4 : 3) && (
-                  <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium text-gray-500">
-                    +{project.tech.length - (isFeatured ? 4 : 3)}
-                  </span>
-                )}
-              </div>
-
-              <h3
-                className={`font-bold text-white mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${project.accent} transition-all duration-300 ${
-                  isFeatured ? 'text-2xl lg:text-3xl' : 'text-xl'
-                }`}
-              >
-                {project.title}
-              </h3>
-
-              <p
-                className={`text-gray-400 leading-relaxed flex-1 ${
-                  isFeatured ? 'text-sm lg:text-base line-clamp-3 lg:line-clamp-4' : 'text-sm line-clamp-2'
-                }`}
-              >
-                {project.description}
-              </p>
-
-              <div className="mt-4 flex items-center gap-2 text-sm font-medium text-purple-300/80 group-hover:text-purple-200 transition-colors">
-                <span>Explore project</span>
-                <motion.span
-                  className="inline-block"
-                  initial={false}
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-                >
-                  →
-                </motion.span>
-              </div>
-            </div>
+            <p className="mt-4 text-xs uppercase tracking-[0.15em] text-[#b8924a]">
+              View case study →
+            </p>
           </div>
-        </button>
-      </motion.div>
+        </div>
+      </button>
     </motion.article>
   )
 }
@@ -345,7 +267,7 @@ function ProjectModal({ project, onClose }) {
       onClick={onClose}
     >
       <motion.div
-        className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+        className="absolute inset-0 bg-[#0c1220]/90"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -353,7 +275,7 @@ function ProjectModal({ project, onClose }) {
 
       <motion.div
         layoutId={`project-${project.title}`}
-        className={`relative w-full flex flex-col max-h-[min(92dvh,92vh)] overflow-hidden rounded-t-3xl sm:rounded-3xl glass-card-border ${glowFromAccent(project.accent)} is-active ${
+        className={`relative w-full flex flex-col max-h-[min(92dvh,92vh)] overflow-hidden rounded-sm glass-card-border ${glowFromAccent(project.accent)} is-active ${
           isMobileProject ? 'max-w-5xl' : 'max-w-7xl'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -372,7 +294,7 @@ function ProjectModal({ project, onClose }) {
             className={
               isMobileProject
                 ? 'relative shrink-0 flex items-center justify-center bg-[#0a0a10] p-4 sm:p-6 min-h-[220px] sm:min-h-[260px] lg:w-[44%] lg:sticky lg:top-0'
-                : 'relative shrink-0 w-full flex items-center justify-center bg-[#0c0c14] p-3 sm:p-5 border-b border-white/[0.06]'
+                : 'relative shrink-0 w-full flex items-center justify-center bg-[#0a101a] p-3 sm:p-5 border-b border-[rgba(184,146,74,0.15)]'
             }
           >
             <img
@@ -381,7 +303,7 @@ function ProjectModal({ project, onClose }) {
               className={
                 isMobileProject
                   ? 'relative max-w-full max-h-[36vh] sm:max-h-[40vh] lg:max-h-[70vh] w-auto h-auto object-contain rounded-xl shadow-2xl shadow-black/40'
-                  : 'relative w-full max-h-[32vh] sm:max-h-[38vh] md:max-h-[42vh] object-contain object-top rounded-lg ring-1 ring-white/10'
+                  : 'relative w-full max-h-[32vh] sm:max-h-[38vh] md:max-h-[42vh] object-contain object-top border border-[rgba(184,146,74,0.2)]'
               }
             />
           </div>
@@ -390,15 +312,13 @@ function ProjectModal({ project, onClose }) {
           <div className="flex flex-col flex-1 min-w-0 p-6 sm:p-8 pb-10">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <p className="text-xs font-semibold tracking-[0.2em] uppercase text-purple-400 mb-2">
-                  Case Study
-                </p>
-                <h3 className="text-2xl sm:text-3xl font-bold text-white">{project.title}</h3>
+                <p className="heritage-eyebrow mb-2">Case Study</p>
+                <h3 className="font-display text-2xl sm:text-3xl text-[#f5f0e8]">{project.title}</h3>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white transition-colors"
+                className="shrink-0 w-10 h-10 border border-[rgba(184,146,74,0.35)] flex items-center justify-center text-[#d4b978] hover:bg-[rgba(184,146,74,0.1)] transition-colors"
                 aria-label="Close"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -407,17 +327,15 @@ function ProjectModal({ project, onClose }) {
               </button>
             </div>
 
-            <p className="text-gray-300 leading-relaxed mb-6">{project.description}</p>
+            <p className="text-[#c9c4b8] leading-relaxed mb-6">{project.description}</p>
 
             <div className="mb-8">
-              <p className="text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3">
-                Stack
-              </p>
+              <p className="heritage-eyebrow mb-3 !text-[0.65rem]">Stack</p>
               <div className="flex flex-wrap gap-2">
                 {project.tech.map((tech) => (
                   <span
                     key={tech}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r ${project.accent} text-white shadow-lg`}
+                    className="px-3 py-1 text-xs uppercase tracking-wider text-[#d4b978] border border-[rgba(184,146,74,0.35)]"
                   >
                     {tech}
                   </span>
@@ -427,7 +345,7 @@ function ProjectModal({ project, onClose }) {
 
             <div className="flex flex-wrap gap-3 pt-2">
               {project.maintenance ? (
-                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-800 text-gray-400 text-sm font-semibold border border-gray-700">
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#141c2e] text-[#c9c4b8] text-sm font-semibold border border-[rgba(184,146,74,0.25)]">
                   <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -477,7 +395,7 @@ function Projects() {
   return (
     <section
       id="projects"
-      className="relative min-h-screen py-28 px-4 sm:px-6 overflow-hidden bg-[#050508]"
+      className="relative min-h-screen py-28 px-4 sm:px-6 overflow-hidden section-dark"
     >
       <SectionBackground />
 
@@ -490,21 +408,19 @@ function Projects() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-sm font-semibold tracking-[0.25em] uppercase text-purple-400 mb-4">
-              Selected Work
-            </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] font-display">
-              Projects that{' '}
-              <span className="projects-shimmer-text">ship & scale</span>
+            <p className="heritage-eyebrow mb-4">Selected Work</p>
+            <h2 className="heritage-title text-4xl sm:text-5xl lg:text-6xl text-[#f5f0e8]">
+              Work of{' '}
+              <span className="heritage-title-accent">distinction</span>
             </h2>
-            <p className="mt-4 text-gray-400 text-lg max-w-xl">
+            <p className="mt-4 text-[#9a958a] text-lg max-w-xl">
               A curated collection of web apps, mobile products, and community platforms — built end-to-end.
             </p>
           </motion.div>
 
           {/* Filter pills */}
           <motion.div
-            className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-md self-start lg:self-auto"
+            className="heritage-tabs self-start lg:self-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -515,18 +431,9 @@ function Projects() {
                 key={filter.id}
                 type="button"
                 onClick={() => setActiveFilter(filter.id)}
-                className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  activeFilter === filter.id ? 'text-white' : 'text-gray-400 hover:text-gray-200'
-                }`}
+                className={`heritage-tab ${activeFilter === filter.id ? 'is-active' : ''}`}
               >
-                {activeFilter === filter.id && (
-                  <motion.span
-                    layoutId="project-filter-pill"
-                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg shadow-purple-500/25"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{filter.label}</span>
+                {filter.label}
               </button>
             ))}
           </motion.div>
@@ -560,7 +467,7 @@ function Projects() {
 
         {/* Bottom stat strip */}
         <motion.div
-          className="mt-16 pt-8 border-t border-white/[0.06] flex flex-wrap gap-8 sm:gap-16 justify-center sm:justify-start"
+          className="mt-16 pt-8 border-t border-[rgba(184,146,74,0.2)] flex flex-wrap gap-8 sm:gap-16 justify-center sm:justify-start"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -572,10 +479,10 @@ function Projects() {
             { value: 'Laravel', label: 'Primary stack' },
           ].map((stat) => (
             <div key={stat.label}>
-              <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              <p className="font-display text-2xl sm:text-3xl text-[#d4b978]">
                 {stat.value}
               </p>
-              <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
+              <p className="text-sm text-[#8a8478] mt-1 uppercase tracking-wider">{stat.label}</p>
             </div>
           ))}
         </motion.div>
