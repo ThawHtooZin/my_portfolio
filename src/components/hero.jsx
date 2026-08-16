@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import backgroundUfo from '../assets/background_ufo.jpg'
-import cvPdf from '../assets/Thaw Htoo Zin CV.pdf'
+import cvPdf from '../assets/Thaw_Htoo_Zin_CV.pdf'
 
 const titles = [
   'Software Developer',
@@ -125,7 +125,7 @@ function Hero({ children }) {
             </motion.button>
             <motion.a
               href={cvPdf}
-              download="Thaw Htoo Zin CV.pdf"
+              download="Thaw_Htoo_Zin_CV.pdf"
               className="btn-heritage-outline"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
