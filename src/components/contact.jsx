@@ -41,7 +41,7 @@ const socialLinks = [
   {
     name: 'GitHub',
     handle: '@ThawHtooZin',
-    url: 'https://github.com/ThawHtooZin',
+    url: 'https://github.com/ThawHtooZinTomm',
     icon: <img src={githubIcon} alt="" className="w-5 h-5 opacity-70" />,
   },
   {
